@@ -31,7 +31,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: $URI:latest1
+          tags: ${{env.URI}}:latest1
           network: host
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
@@ -41,10 +41,10 @@ jobs:
         with:
           context: .
           push: true
-          tags: $URI:latest2
+          tags: ${{env.URI}}:latest2
           network: host
-          cache-from: type=registry,ref=$URI:buildcache
-          cache-to: type=registry,ref=user/app:buildcache,mode=max
+          cache-from: type=registry,ref=${{env.URI}}:buildcache
+          cache-to: type=registry,ref=${{env.URI}}:buildcache,mode=max
       - # Temp fix
         # https://github.com/docker/build-push-action/issues/252
         # https://github.com/moby/buildkit/issues/1896
