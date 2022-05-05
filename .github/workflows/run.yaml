@@ -43,6 +43,8 @@ jobs:
           cache-to: type=registry,ref=${{env.URI}}:buildcache,mode=max
 
       - name: Build and push cached on registry by docker build
+        env:
+          DOCKER_BUILDKIT: 1
         run: |
           docker build --network=host \
             --target deps \
@@ -66,9 +68,6 @@ jobs:
         # https://github.com/moby/buildkit/issues/1896
         name: Move cache
         env:
-          HOGE: aaa
-          FUGA: ${{env.AB}}/${{env.HOGE}}/${{env.HOGE}}
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-          echo $FUGA
