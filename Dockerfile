@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y libclang-dev clang
 RUN mkdir -p src/bin
 RUN touch src/lib.rs
 RUN echo "fn main(){}" > src/bin/main.rs
+COPY ./Cargo.toml .
 
 RUN mkdir ./subcrate
 COPY ./subcrate ./subcrate
