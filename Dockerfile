@@ -1,12 +1,9 @@
 FROM rust:1.60 AS builder
 
 WORKDIR /app
-
-COPY Cargo.toml .
-
 RUN apt-get update && apt-get install -y libclang-dev clang
 
-
+# dependencies
 RUN mkdir -p src/bin
 RUN touch src/lib.rs
 RUN echo "fn main(){}" > src/bin/main.rs
@@ -18,11 +15,13 @@ RUN touch subcrate/lib.rs
 COPY ./Cargo.lock .
 RUN cargo build --release
 
+# binary
 COPY ./src ./src
 RUN touch src/lib.rs
 
 RUN cargo build --release
 
+# production
 FROM alpine:latest AS prod
 COPY --from=builder /app/target/release/build-test /usr/bin/build-test
 
