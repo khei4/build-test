@@ -36,7 +36,7 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
-      - name: Build and push cached on registry
+      - name: Build and push cached on registry by docker buildx build
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -45,6 +45,27 @@ jobs:
           network: host
           cache-from: type=registry,ref=${{env.URI}}:buildcache
           cache-to: type=registry,ref=${{env.URI}}:buildcache,mode=max
+
+      - name: Build and push cached on registry by docker build
+        run: |
+          docker build --network=host \
+            --target deps \
+            --cache-from=${URI}:deps \
+            -t ${URI}:deps \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            -f Dockerfile.production \
+            .
+          docker push ${URI}:deps
+
+          ECR_URI=$IMAGE_NAME:$IMAGE_TAG
+          docker build --network=host \
+            --cache-from=${URI}:deps \
+            --cache-from=${URI} \
+            -t $ECR_URI \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            -f Dockerfile.production \
+            .
+          docker push ${URI}
       - # Temp fix
         # https://github.com/docker/build-push-action/issues/252
         # https://github.com/moby/buildkit/issues/1896
