@@ -2,8 +2,6 @@ name: learn-github-actions
 on: [push]
 jobs:
   docker:
-    env:
-      URI: kasano/app
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,27 +21,32 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push cached on local by docker buildx
+        env:
+          URI: kasano/app-c-x-local
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ${{env.URI}}:latest1
+          tags: ${{env.URI}}:latest
           network: host
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
       - name: Build and push cached on registry by docker buildx
+        env:
+          URI: kasano/app-c-x
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ${{env.URI}}:latest2
+          tags: ${{env.URI}}:latest
           network: host
           cache-from: type=registry,ref=${{env.URI}}:buildcache
           cache-to: type=registry,ref=${{env.URI}}:buildcache,mode=max
 
       - name: Build and push cached on registry by docker build
         env:
+          URI: kasano/app-c
           DOCKER_BUILDKIT: 1
         run: |
           docker build --network=host \
@@ -58,11 +61,11 @@ jobs:
           docker build --network=host \
             --cache-from=${URI}:deps \
             --cache-from=${URI} \
-            -t ${URI}:latest3 \
+            -t ${URI}:latest \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             -f Dockerfile \
             .
-          docker push ${URI}:latest3
+          docker push ${URI}:latest
       - # Temp fix
         # https://github.com/docker/build-push-action/issues/252
         # https://github.com/moby/buildkit/issues/1896
