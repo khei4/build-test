@@ -53,17 +53,16 @@ jobs:
             --cache-from=${URI}:deps \
             -t ${URI}:deps \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
-            -f Dockerfile.production \
+            -f Dockerfile \
             .
           docker push ${URI}:deps
 
-          ECR_URI=$IMAGE_NAME:$IMAGE_TAG
           docker build --network=host \
             --cache-from=${URI}:deps \
             --cache-from=${URI} \
-            -t $ECR_URI \
+            -t ${URI} \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
-            -f Dockerfile.production \
+            -f Dockerfile \
             .
           docker push ${URI}
       - # Temp fix
