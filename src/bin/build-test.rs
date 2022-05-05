@@ -1,5 +1,6 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use anyhow::Result;
+use num_bigint::BigUint;
 use subcrate::HOGE;
 #[get("/")]
 async fn hello() -> impl Responder {
@@ -17,7 +18,8 @@ async fn manual_hello() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let meaningless_error: Result<(), ()> = Result::Err(());
+    let _meaningless_error: Result<(), ()> = Result::Err(());
+    let _meaningless_bignum: BigUint = BigUint::new(vec![0]);
     HttpServer::new(|| {
         App::new()
             .service(hello)
