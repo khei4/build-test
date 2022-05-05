@@ -33,17 +33,17 @@ jobs:
           cache-from: type=registry,ref=${{env.URI}}:buildcache
           cache-to: type=registry,ref=${{env.URI}}:buildcache,mode=max
 
-      - name: Build and push cached on local by docker buildx
-        env:
-          URI: kasano/app-c-x-local
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: ${{env.URI}}:latest
-          network: host
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+      # - name: Build and push cached on local by docker buildx
+      #   env:
+      #     URI: kasano/app-c-x-local
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: ${{env.URI}}:latest
+      #     network: host
+      #     cache-from: type=local,src=/tmp/.buildx-cache
+      #     cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
       - name: Build and push cached on registry by docker build
         env:
