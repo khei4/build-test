@@ -1,9 +1,5 @@
-# hoe
-
 name: learn-github-actions
 on: [push]
-env:
-  env_1: hashito
 jobs:
   docker:
     env:
@@ -26,7 +22,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push cached on local
+      - name: Build and push cached on local by docker buildx
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -36,7 +32,7 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
-      - name: Build and push cached on registry by docker buildx build
+      - name: Build and push cached on registry by docker buildx
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -60,11 +56,11 @@ jobs:
           docker build --network=host \
             --cache-from=${URI}:deps \
             --cache-from=${URI} \
-            -t ${URI} \
+            -t ${URI}:latest3 \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             -f Dockerfile \
             .
-          docker push ${URI}
+          docker push ${URI}:latest3
       - # Temp fix
         # https://github.com/docker/build-push-action/issues/252
         # https://github.com/moby/buildkit/issues/1896
