@@ -1,4 +1,5 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use anyhow::Result;
 use subcrate::HOGE;
 #[get("/")]
 async fn hello() -> impl Responder {
@@ -16,6 +17,7 @@ async fn manual_hello() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    let meaningless_error: Result<(), ()> = Result::Err(());
     HttpServer::new(|| {
         App::new()
             .service(hello)
