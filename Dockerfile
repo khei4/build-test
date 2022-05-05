@@ -24,6 +24,6 @@ RUN cargo build --release
 
 # production
 FROM alpine:latest AS prod
-COPY --from=builder /app/target/release/build-test /usr/bin/build-test
+COPY --from=deps /app/target/release/build-test /usr/bin/build-test
 
 CMD [ "build-test" ]
