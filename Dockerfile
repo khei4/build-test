@@ -24,6 +24,6 @@ RUN touch src/lib.rs
 RUN cargo build --release
 
 FROM alpine:latest AS prod
-COPY --from=builder /app/target/release/build_test /usr/bin/build_test
+COPY --from=builder /app/target/release/build-test /usr/bin/build-test
 
-CMD [ "build_test" ]
+CMD [ "build-test" ]
