@@ -27,7 +27,7 @@ jobs:
 
       - name: Test
         run: cargo test --workspace --verbose -- --test-threads=1
-  docker:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
