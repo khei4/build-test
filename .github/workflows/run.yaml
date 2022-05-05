@@ -37,7 +37,7 @@ jobs:
 
       - name: Build and push
         run: |
-          docker buildx build --network host\
+          docker buildx build --network host \
           --tag kasano/app:latest \
           --cache-from type=local,src=/tmp/.buildx-cache \
           --cache-to type=local,dest=/tmp/.buildx-cache-new,mode=max \
