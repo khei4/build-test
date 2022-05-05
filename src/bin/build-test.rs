@@ -20,6 +20,7 @@ async fn manual_hello() -> impl Responder {
 async fn main() -> std::io::Result<()> {
     let _meaningless_error: Result<(), ()> = Result::Err(());
     let _meaningless_bignum: BigUint = BigUint::new(vec![0]);
+    let _meaningless_usize: usize = 13;
     HttpServer::new(|| {
         App::new()
             .service(hello)
