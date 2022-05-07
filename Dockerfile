@@ -23,7 +23,7 @@ RUN touch src/lib.rs
 RUN cargo build --release
 
 # production
-FROM alpine:latest AS prod
+FROM gcr.io/distroless/cc AS prod
 COPY --from=deps /app/target/release/build-test /usr/bin/build-test
 
 CMD [ "build-test" ]
